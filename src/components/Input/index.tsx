@@ -27,6 +27,7 @@ const Input: React.FC<InputProps> = ({ name, icon: Icon, ...rest }) => {
     <Container>
       {Icon && <Icon size={20} />}
       <input ref={inputRef} {...rest} />
+    {error}
     </Container>
   );
 };

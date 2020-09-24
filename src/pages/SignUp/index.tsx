@@ -3,6 +3,7 @@ import { FiArrowLeft, FiMail, FiLock, FiUser } from 'react-icons/fi';
 import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
 
+/** Importando todas as funcionalidades do yup e add na variável Yup*/
 import * as Yup from 'yup';
 import logoImg from '../../assets/logo.svg';
 import Input from '../../components/Input';
@@ -29,15 +30,11 @@ const SignUp: React.FC = () => {
         password: Yup.string().min(6, 'Mínimo de 6 digitos'),
 
       });
-
       await schema.validate(data, {
         abortEarly: false,
       });
 
-
-
     } catch (err) {
-
       const erros = getValidationErrors(err);
       formRef.current?.setErrors(erros);
     }
@@ -53,7 +50,12 @@ const SignUp: React.FC = () => {
 
           <Input name="name" icon={FiUser} placeholder="Nome" />
           <Input name="email" icon={FiMail} placeholder="E-mail" />
-          <Input name="password" icon={FiLock} type="password" placeholder="Senha" />
+          <Input
+            name="password"
+            icon={FiLock}
+            type="password"
+            placeholder="Senha"
+          />
 
           <Button type="submit"> Cadastrar</Button>
         </Form>

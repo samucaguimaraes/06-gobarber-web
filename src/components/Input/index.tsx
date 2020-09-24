@@ -1,4 +1,4 @@
-import React, { InputHTMLAttributes, useEffect, useRef } from 'react';
+import React, { InputHTMLAttributes, useEffect, useRef, useState, useCallback } from 'react';
 import { IconBaseProps } from 'react-icons';
 import { Container } from './styles';
 import { useField } from '@unform/core';
@@ -10,8 +10,12 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 const Input: React.FC<InputProps> = ({ name, icon: Icon, ...rest }) => {
-  /** Utilizando o unform para formulários e persistencia de inputs */
-  const inputRef = useRef(null);
+  /** Add um referencia ao input */
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [isFocused, setIsFocused] = useState(false);
+  const [isFilled, setIsFilled] = useState(false);
+
+  /** Registrando um elemento de tela */
   const { fieldName, defaultValue, error, registerField } = useField(name);
 
   useEffect( () => {
@@ -23,11 +27,27 @@ const Input: React.FC<InputProps> = ({ name, icon: Icon, ...rest }) => {
   },[fieldName, registerField]);
 
 
+
+  /** Função para controlar o fucus do input e icone
+  *   Utilizando o hook useCallBack para criar a função
+  *   de forma otimizada
+  **/
+  const handleInputBlur = useCallback(() =>{
+    setIsFocused(false);
+    setIsFilled(!!inputRef.current?.value);
+    }, []);
+
+
   return (
-    <Container>
+    <Container isFilled={isFilled} isFocused={isFocused}>
       {Icon && <Icon size={20} />}
-      <input ref={inputRef} {...rest} />
-    {error}
+      <input
+        onFocus={ () => {setIsFocused(true)}}
+        onBlur= {handleInputBlur}
+        defaultValue={defaultValue}
+        ref={inputRef}
+        {...rest} />
+      {error}
     </Container>
   );
 };

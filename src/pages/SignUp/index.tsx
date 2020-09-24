@@ -22,6 +22,7 @@ const SignUp: React.FC = () => {
 
   const handleSubmit = useCallback(async (data: object) => {
     try {
+      /** Setando o array de erros comom vazio */
       formRef.current?.setErrors({});
 
       const schema = Yup.object().shape({
@@ -35,6 +36,7 @@ const SignUp: React.FC = () => {
       });
 
     } catch (err) {
+
       const erros = getValidationErrors(err);
       formRef.current?.setErrors(erros);
     }

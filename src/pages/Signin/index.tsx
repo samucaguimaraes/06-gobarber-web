@@ -1,30 +1,31 @@
 import React, { useCallback, useRef }  from 'react';
-
 import { FiLogIn, FiMail, FiLock } from 'react-icons/fi';
-
 import logoImg from '../../assets/logo.svg';
-
 import { Form } from '@unform/web';
-
 import { FormHandles } from '@unform/core';
-
 import Input from '../../components/Input';
-
 import Button from '../../components/Button';
-
 import { Container, Content, Background } from './styles';
-
 import * as Yup from 'yup';
 import getValidationErrors from '../../utils/getValidationErrors';
+
+import { useAuth } from '../../hooks/Auth';
+
+/** Interface p/ o formulario */
+interface SignInFormData{
+  email: string;
+  password: string;
+}
 
 const SignIn: React.FC = () => {
 /** Utilizando a lib unform, podemos acessar os elementos do
    *  inner atraves de algumas funcoes
    **/
   const formRef = useRef <FormHandles>(null);
+  const {signIn} = useAuth();
 
 
-  const handleSubmit = useCallback(async (data: object) => {
+  const handleSubmit = useCallback(async (data: SignInFormData) => {
     try {
       /** Setando o array de erros comom vazio */
       formRef.current?.setErrors({});
@@ -38,12 +39,21 @@ const SignIn: React.FC = () => {
         abortEarly: false,
       });
 
+      signIn({
+        email: data.email,
+        password: data.password,
+      });
     } catch (err) {
+      if(err instanceof Yup.ValidationError){
+        const erros = getValidationErrors(err);
+        formRef.current?.setErrors(erros);
+      }
 
-      const erros = getValidationErrors(err);
-      formRef.current?.setErrors(erros);
+      //Disparar um toast...
     }
-  }, [])
+  },
+  [signIn],
+  );
 return (
   <Container>
     <Content>

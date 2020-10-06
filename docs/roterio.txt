@@ -1,0 +1,17 @@
+#Estrutura de contexto para autenticação
+
+1- Criação do componente AtuhContext.ts, importando do react o CreateContext
+com isso pode ser armazenados dadaos de sessão que serão usuados por toda a
+aplicação
+
+## Requisitos
+a) Metodo de autenticação no front-end que pode ser acessado de qualquer lugar
+ 1) Criado o AuthContext (Contexto para autenticação)
+ 2) Adicionado a pasta services e o api.ts para conectar com o nosso back-end
+  #add axios
+  yarn add axios
+
+  3) Inportando o api cliente no apiContext para acessar o back-end
+
+b) Armazenar o token no localstorage
+

@@ -10,6 +10,8 @@ import * as Yup from 'yup';
 import getValidationErrors from '../../utils/getValidationErrors';
 
 import { useAuth } from '../../hooks/Auth';
+import { useToast } from '../../hooks/Toast';
+
 
 /** Interface p/ o formulario */
 interface SignInFormData{
@@ -23,6 +25,7 @@ const SignIn: React.FC = () => {
    **/
   const formRef = useRef <FormHandles>(null);
   const {signIn} = useAuth();
+  const {addToast} = useToast();
 
 
   const handleSubmit = useCallback(async (data: SignInFormData) => {
@@ -39,20 +42,25 @@ const SignIn: React.FC = () => {
         abortEarly: false,
       });
 
-      signIn({
+      await signIn({
         email: data.email,
         password: data.password,
       });
     } catch (err) {
       if(err instanceof Yup.ValidationError){
         const erros = getValidationErrors(err);
+
         formRef.current?.setErrors(erros);
       }
 
-      //Disparar um toast...
+      addToast({
+        type: 'error',
+        title: 'Erro na autenticação',
+        description: 'Houve um problema no processo de login.',
+      });
     }
   },
-  [signIn],
+  [signIn, addToast],
   );
 return (
   <Container>

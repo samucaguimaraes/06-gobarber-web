@@ -26,7 +26,7 @@ from {
 }
 to {
   opacity: 1;
-  transform: translateX(50px);
+  transform: translateX(0px);
 }
 
 `;
